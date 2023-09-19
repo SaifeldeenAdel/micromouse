@@ -28,7 +28,6 @@ class MPU():
             }
         }
         self.yaw = 0
-        self.prev = None
         self.gyroZOffset = 0
         
         self.i2c.writeto_mem(address, PWR_MGMT_1, b'\x00')
@@ -37,6 +36,8 @@ class MPU():
         self.i2c.writeto_mem(address, CONFIG, b'\x00')
         self.i2c.writeto_mem(address, GYRO_CONFIG, b'\x00')
         self.i2c.writeto_mem(address, ACCEL_CONFIG, b'\x00')
+        
+        self.calibrate()
         
      
     def read_raw_data(self, addr):
@@ -73,13 +74,17 @@ class MPU():
     def calibrate(self):
         print("Keep Still... Calibrating")
         sum = 0
-        for i in range(1000):
+        for i in range(300):
             sum += self.getRawData()['gyro']['z']
-        self.gyroZOffset = sum / 1000
-        print(self.gyroZOffset)
+        self.gyroZOffset = sum / 300
     
-    
+    def reset(self):
+        self.yaw = 0
+        
+        
     def getYaw(self, dt):
+        self.getRawData()
         if abs(self.data['gyro']['z']) > 1.9:
-            self.yaw += self.data['gyro']['z'] * dt
-        return self.yaw
+            self.yaw += round(self.data['gyro']['z'],2) * dt
+        return round(self.yaw * 2, 2)
+

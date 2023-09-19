@@ -40,8 +40,6 @@ class Maze:
         # Clearing flood, sets all cells to None except center
         self.clearFlood("center")
 
-        # Draw flood values
-        self.setFlood()
 
     def isInCenter(self, position) -> bool:
         """Checks if mouse is in the center"""

@@ -1,10 +1,12 @@
-import myAPI
 from DIRECTIONS import Directions
+from Components import Motion
+
 class Mouse:
     def __init__(self, x, y, direction : Directions) -> None:
         self.x = x
         self.y = y
         self.dir = direction
+        self.motion = Motion(600,600)
 
     def getPosition(self) -> tuple:
         return (self.x, self.y)
@@ -25,7 +27,7 @@ class Mouse:
         self.turnRight()
     
     def moveForward(self) -> None:
-        # myAPI.moveForward()
+        self.motion.forward()
         if(self.dir == Directions.NORTH): # ^
           self.y += 1
         if(self.dir == Directions.EAST): # ->
@@ -61,6 +63,7 @@ class Mouse:
         
         # Moves forward to next cell 
         self.moveForward()
+
 
 
 
